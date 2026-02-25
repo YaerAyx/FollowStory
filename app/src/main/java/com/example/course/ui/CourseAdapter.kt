@@ -53,12 +53,14 @@ class CourseAdapter(private var courses: List<Course> = emptyList()) :
                 locationTv.setTextColor(white)
                 teacherTv.setTextColor(android.graphics.Color.LTGRAY)
             } else {
-                val darkUserRequest = android.graphics.Color.BLACK // Force Black for max contrast
+                val darkUserRequest = android.graphics.Color.BLACK
                 nameTv.setTextColor(darkUserRequest)
                 timeTv.setTextColor(darkUserRequest)
                 locationTv.setTextColor(darkUserRequest)
                 teacherTv.setTextColor(android.graphics.Color.DKGRAY)
             }
+            
+            // Removed the accent background as requested for a cleaner look
         }
     }
 }

@@ -59,7 +59,14 @@ class TodayFragment : Fragment() {
             val javaDay = calendar.get(Calendar.DAY_OF_WEEK)
             val dbDay = if (javaDay == Calendar.SUNDAY) 7 else javaDay - 1
             
-            val courses = db.courseDao().getCoursesByDay(dbDay).sortedBy { it.startNode }
+            val appPrefs = requireContext().getSharedPreferences("app_prefs", android.content.Context.MODE_PRIVATE)
+            val startMillis = appPrefs.getLong("term_start_date", 0L)
+            val currentWeek = com.example.course.utils.WeekUtils.calculateCurrentWeek(startMillis)
+            
+            val allCoursesForDay = db.courseDao().getCoursesByDay(dbDay)
+            val courses = allCoursesForDay.filter { 
+                com.example.course.utils.WeekUtils.isWeekInPattern(it.weeks, currentWeek)
+            }.sortedBy { it.startNode }
             
             withContext(Dispatchers.Main) {
                 if (courses.isEmpty()) {

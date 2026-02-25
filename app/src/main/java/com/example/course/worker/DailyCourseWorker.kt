@@ -28,7 +28,14 @@ class DailyCourseWorker(appContext: Context, workerParams: WorkerParameters) :
         val javaDay = calendar.get(Calendar.DAY_OF_WEEK)
         val dbDay = if (javaDay == Calendar.SUNDAY) 7 else javaDay - 1
 
-        val todayCourses = database.courseDao().getCoursesByDay(dbDay)
+        val prefs = applicationContext.getSharedPreferences("app_prefs", Context.MODE_PRIVATE)
+        val startMillis = prefs.getLong("term_start_date", 0L)
+        val currentWeek = com.example.course.utils.WeekUtils.calculateCurrentWeek(startMillis)
+
+        val allCourses = database.courseDao().getCoursesByDay(dbDay)
+        val todayCourses = allCourses.filter { 
+            com.example.course.utils.WeekUtils.isWeekInPattern(it.weeks, currentWeek)
+        }.sortedBy { it.startNode }
         
         if (todayCourses.isNotEmpty()) {
             sendNotification("今日课程提醒", "今天有 ${todayCourses.size} 节课，第一节是 ${todayCourses[0].name}")

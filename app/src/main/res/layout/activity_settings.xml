@@ -128,6 +128,48 @@
 
             <View android:layout_width="match_parent" android:layout_height="1dp" android:background="#E5E5EA" android:layout_marginStart="16dp"/>
 
+            <!-- Reset BG -->
+            <LinearLayout
+                android:id="@+id/btn_reset_bg"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:gravity="center_vertical"
+                android:clickable="true"
+                android:background="?attr/selectableItemBackground"
+                android:padding="16dp">
+                <TextView
+                    android:layout_width="0dp" android:layout_height="wrap_content" android:layout_weight="1"
+                    android:text="重置背景为默认" android:textSize="17sp" android:textColor="#007AFF"/>
+                <ImageView android:layout_width="24dp" android:layout_height="24dp" android:src="@drawable/ic_chevron_right" android:alpha="0.3"/>
+            </LinearLayout>
+
+            <View android:layout_width="match_parent" android:layout_height="1dp" android:background="#E5E5EA" android:layout_marginStart="16dp"/>
+
+            <!-- Blur adjustment -->
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:padding="16dp">
+                <TextView
+                    android:id="@+id/tv_blur_label"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="背景模糊度"
+                    android:textColor="#333333"
+                    android:textSize="17sp" />
+                <SeekBar
+                    android:id="@+id/sb_blur"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="12dp"
+                    android:max="25"
+                    android:progress="0" />
+            </LinearLayout>
+
+            <View android:layout_width="match_parent" android:layout_height="1dp" android:background="#E5E5EA" android:layout_marginStart="16dp"/>
+
             <!-- Course Color -->
             <LinearLayout
                 android:id="@+id/btn_course_color"
@@ -146,6 +188,25 @@
 
             <View android:layout_width="match_parent" android:layout_height="1dp" android:background="#E5E5EA" android:layout_marginStart="16dp"/>
 
+            <!-- Term Start Date -->
+            <LinearLayout
+                android:id="@+id/btn_term_start"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:gravity="center_vertical"
+                android:clickable="true"
+                android:background="?attr/selectableItemBackground"
+                android:padding="16dp">
+                <TextView
+                    android:id="@+id/tv_term_start_value"
+                    android:layout_width="0dp" android:layout_height="wrap_content" android:layout_weight="1"
+                    android:text="开学日期设置" android:textSize="17sp" android:textColor="#000000"/>
+                <ImageView android:layout_width="24dp" android:layout_height="24dp" android:src="@drawable/ic_chevron_right" android:alpha="0.3"/>
+            </LinearLayout>
+
+            <View android:layout_width="match_parent" android:layout_height="1dp" android:background="#E5E5EA" android:layout_marginStart="16dp"/>
+
             <!-- Reminder -->
             <LinearLayout
                 android:id="@+id/btn_reminder"
@@ -157,8 +218,27 @@
                 android:background="?attr/selectableItemBackground"
                 android:padding="16dp">
                 <TextView
+                    android:id="@+id/tv_reminder_value"
                     android:layout_width="0dp" android:layout_height="wrap_content" android:layout_weight="1"
                     android:text="提醒时间设置" android:textSize="17sp" android:textColor="#000000"/>
+                <ImageView android:layout_width="24dp" android:layout_height="24dp" android:src="@drawable/ic_chevron_right" android:alpha="0.3"/>
+            </LinearLayout>
+
+            <View android:layout_width="match_parent" android:layout_height="1dp" android:background="#E5E5EA" android:layout_marginStart="16dp"/>
+
+            <!-- Clear Data -->
+            <LinearLayout
+                android:id="@+id/btn_clear_data"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:gravity="center_vertical"
+                android:clickable="true"
+                android:background="?attr/selectableItemBackground"
+                android:padding="16dp">
+                <TextView
+                    android:layout_width="0dp" android:layout_height="wrap_content" android:layout_weight="1"
+                    android:text="清除所有课程数据" android:textSize="17sp" android:textColor="#FF3B30"/>
                 <ImageView android:layout_width="24dp" android:layout_height="24dp" android:src="@drawable/ic_chevron_right" android:alpha="0.3"/>
             </LinearLayout>
 

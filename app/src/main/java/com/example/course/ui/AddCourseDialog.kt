@@ -73,9 +73,10 @@ class AddCourseDialog : DialogFragment() {
         val btnSave = view.findViewById<Button>(R.id.btn_save)
 
         // Pre-fill
+        etWeeks.setText("1-16")
         etWeekDay.setText(defaultDay.toString())
         etStart.setText(defaultStart.toString())
-        etEnd.setText((defaultStart + 1).toString()) // Default 2 periods
+        etEnd.setText(defaultStart.toString()) // Default 1 period for precision
 
         btnSave.setOnClickListener {
             val name = etName.text.toString()

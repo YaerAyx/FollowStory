@@ -72,8 +72,8 @@ class ScheduleFragment : Fragment() {
         
         // Calculate Column Width (Screen Width / Columns)
         val displayMetrics = resources.displayMetrics
-        val screenWidth = displayMetrics.widthPixels
-        val nodeColWidth = 80 // Fixed width for first col
+        val screenWidth = displayMetrics.widthPixels - (16 * displayMetrics.density).toInt() // Account for grid padding
+        val nodeColWidth = (40 * displayMetrics.density).toInt() // Responsive node col
         val remainingWidth = screenWidth - nodeColWidth
         val cellWidth = remainingWidth / daysToShow
 
@@ -153,9 +153,10 @@ class ScheduleFragment : Fragment() {
         view.isClickable = true
         view.isFocusable = true
         
-        view.setOnClickListener {
+        view.setOnLongClickListener {
             AddCourseDialog.newInstance(col, row)
                 .show(childFragmentManager, AddCourseDialog.TAG)
+            true
         }
 
         val params = GridLayout.LayoutParams()
@@ -175,6 +176,10 @@ class ScheduleFragment : Fragment() {
         cardView.cardElevation = 2f
         cardView.useCompatPadding = true
         
+        cardView.setOnClickListener {
+            showCourseDetail(course)
+        }
+
         val color = getCourseColor(course.name)
         cardView.setCardBackgroundColor(color)
         
@@ -210,12 +215,59 @@ class ScheduleFragment : Fragment() {
         gridLayout.addView(cardView)
     }
 
+    private fun showCourseDetail(course: Course) {
+        androidx.appcompat.app.AlertDialog.Builder(requireContext())
+            .setTitle(course.name)
+            .setMessage("地点: ${course.location}\n教师: ${course.teacher}\n班级: ${course.className}\n周次: ${course.weeks}\n时间: 第${course.startNode}-${course.endNode}节")
+            .setPositiveButton("确定", null)
+            .setNegativeButton("删除") { _, _ -> deleteCourse(course) }
+            .show()
+    }
+
+    private fun deleteCourse(course: Course) {
+        lifecycleScope.launch(Dispatchers.IO) {
+            val db = Room.databaseBuilder(
+                requireContext(),
+                AppDatabase::class.java, "course-database"
+            ).build()
+            db.courseDao().delete(course)
+            db.close()
+            withContext(Dispatchers.Main) {
+                loadAllCourses() // Refresh
+                android.widget.Toast.makeText(context, "已删除", android.widget.Toast.LENGTH_SHORT).show()
+            }
+        }
+    }
+
     private fun getCourseColor(name: String): Int {
-        val colors = listOf(
-            0xFFEF9A9A.toInt(), 0xFFF48FB1.toInt(), 0xFFCE93D8.toInt(),
-            0xFFB39DDB.toInt(), 0xFF9FA8DA.toInt(), 0xFF90CAF9.toInt(),
-            0xFF81D4FA.toInt(), 0xFF80DEEA.toInt(), 0xFF80CBC4.toInt()
-        )
+        val prefs = requireContext().getSharedPreferences("app_prefs", Context.MODE_PRIVATE)
+        val scheme = prefs.getInt("color_scheme", 0)
+        
+        val colors = when(scheme) {
+            1 -> listOf( // Fresh Candy
+                0xFFFFAB91.toInt(), 0xFFFFCC80.toInt(), 0xFFE6EE9C.toInt(),
+                0xFFA5D6A7.toInt(), 0xFF80CBC4.toInt(), 0xFF81D4FA.toInt(),
+                0xFFB39DDB.toInt(), 0xFFF48FB1.toInt()
+            )
+            2 -> listOf( // Deep Space (Lighter shades for dark mode card feel)
+                0xFF5D4037.toInt(), 0xFF455A64.toInt(), 0xFF303F9F.toInt(),
+                0xFF1976D2.toInt(), 0xFF388E3C.toInt(), 0xFFFBC02D.toInt(),
+                0xFFE64A19.toInt(), 0xFF512DA8.toInt()
+            )
+            3 -> listOf( // Random Bright Colors (Seed by name)
+                0xFFF44336.toInt(), 0xFFE91E63.toInt(), 0xFF9C27B0.toInt(),
+                0xFF673AB7.toInt(), 0xFF3F51B5.toInt(), 0xFF2196F3.toInt(),
+                0xFF03A9F4.toInt(), 0xFF00BCD4.toInt(), 0xFF009688.toInt(),
+                0xFF4CAF50.toInt(), 0xFF8BC34A.toInt(), 0xFFCDDC39.toInt(),
+                0xFFFFEB3B.toInt(), 0xFFFFC107.toInt(), 0xFFFF9800.toInt(),
+                0xFFFF5722.toInt()
+            )
+            else -> listOf( // Default
+                0xFFEF9A9A.toInt(), 0xFFF48FB1.toInt(), 0xFFCE93D8.toInt(),
+                0xFFB39DDB.toInt(), 0xFF9FA8DA.toInt(), 0xFF90CAF9.toInt(),
+                0xFF81D4FA.toInt(), 0xFF80DEEA.toInt(), 0xFF80CBC4.toInt()
+            )
+        }
         return colors[Math.abs(name.hashCode()) % colors.size]
     }
 }

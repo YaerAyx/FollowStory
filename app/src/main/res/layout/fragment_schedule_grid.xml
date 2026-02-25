@@ -4,22 +4,16 @@
     android:layout_height="match_parent"
     android:fillViewport="true">
 
-    <HorizontalScrollView
+    <GridLayout
+        android:id="@+id/timetable_grid"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content">
+        android:layout_height="match_parent"
+        android:columnCount="8" 
+        android:rowCount="14"
+        android:padding="8dp">
 
-        <GridLayout
-            android:id="@+id/timetable_grid"
-            android:layout_width="wrap_content"
-            android:layout_height="match_parent"
-            android:columnCount="8" 
-            android:rowCount="14"
-            android:padding="8dp">
-
-            <!-- Dynamic content will be added here -->
-            <!-- Column 0 is for Time Nodes, Cols 1-7 for Mon-Sun -->
-            
-        </GridLayout>
-
-    </HorizontalScrollView>
+        <!-- Dynamic content will be added here -->
+        <!-- Column 0 is for Time Nodes, Cols 1-7 for Mon-Sun -->
+        
+    </GridLayout>
 </ScrollView>
